@@ -15,31 +15,36 @@ impl EventHandler for Handler {
         old_state: Option<VoiceState>,
         new_state: VoiceState,
     ) {
-        if old_state.is_some() {
-            return;
+        if let Some(old_state) = old_state {
+            if old_state.channel_id == new_state.channel_id {
+                return;
+            }
         }
         let Some(channel_id) = new_state.channel_id else {
             return
         };
-        if let Some(member) = new_state.member {
-            if member.user.bot {
+        let Some(member)= new_state.member else{return };
+        if member.user.bot {
+            return;
+        }
+        let Some(guild_channel) = ctx.http.get_channel(channel_id.into()).await.ok().and_then(|channel| channel.guild()) else {return };
+        if let Some(afk_channel_id) = guild_channel
+            .guild(&ctx.cache)
+            .and_then(|guild| guild.afk_channel_id)
+        {
+            if channel_id == afk_channel_id {
                 return;
             }
-
-            if let Ok(channel) = ctx.http.get_channel(channel_id.into()).await {
-                if let Some(guild_channel) = channel.guild() {
-                    if let Ok(members) = guild_channel.members(&ctx.cache).await {
-                        if members.len() == 1 {
-                            if let Err(why) = channel_id
-                                .say(&ctx.http, "<@939494577574924339> join")
-                                .await
-                            {
-                                println!("Error sending message: {:?}", why)
-                            }
-                        }
-                    }
-                }
-            }
+        }
+        let Ok(members) = guild_channel.members(&ctx.cache).await else{return}  ;
+        if members.len() != 1 {
+            return;
+        }
+        if let Err(why) = channel_id
+            .say(&ctx.http, "<@939494577574924339> join")
+            .await
+        {
+            println!("Error sending message: {:?}", why)
         }
     }
 
