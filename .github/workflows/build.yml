@@ -11,13 +11,14 @@ on:
         type: string
     outputs:
       image_tags:
-        value: ${{ jobs.docker.outputs.image_tags }}
+        value: ${{ jobs.image.outputs.image_tags }}
       image_url:
         value: https://ghcr.io/${{ github.repository }}
 
 env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_REGISTRY: ghcr.io
+  IMAGE_NAMESPACE: ${{ github.repository_owner }}
+  IMAGE_NAME: ${{ github.event.repository.name }}
   BINARY_NAME: pow-summon-discordbot
 
 jobs:
@@ -79,7 +80,7 @@ jobs:
             mv ${{ env.BINARY_NAME }} "$filename"
             gh release upload ${{ inputs.tag-name }} "$filename"#${{ matrix.target }} --clobber
           fi
-  docker:
+  image:
     needs: build
     if: ${{ github.event_name != 'pull_request' && github.ref_name == github.event.repository.default_branch }}
     permissions:
@@ -87,49 +88,41 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       image_tags: ${{ steps.meta.outputs.tags }}
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      GH_REPO: ${{ github.repository }}
     steps:
-      - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
-        with:
-          sparse-checkout: |
-            .github/workflows/build/Dockerfile
-          sparse-checkout-cone-mode: false
       - name: Download build artifact
-        uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
           path: artifact
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@4c0219f9ac95b02789c1075625400b2acbff50b1 # v2.9.1
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@465a07811f14bebb1938fbed4728c6a1ff8901fc # v2.2.0
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@818d4b7b91585d195f67373fd9cb0332e31a7175 # v4.6.0
+        uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5.5.1
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}
           tags: |
             type=semver,pattern={{version}},value=${{ inputs.tag-name }}
             type=semver,pattern={{major}}.{{minor}},value=${{ inputs.tag-name }}
             type=semver,pattern={{major}},value=${{ inputs.tag-name }}
             type=edge
             type=ref,event=branch
-            type=ref,event=pr
-      - name: Build and push Docker image
-        uses: docker/build-push-action@2eb1c1961a95fc15694676618e422e8ba1d63825 # v4.1.1
-        with:
-          context: .
-          file: .github/workflows/build/Dockerfile
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+
+      - name: Build Images
+        run: |
+          build() {
+            newcontainer=$(buildah from --platform="$1" scratch)
+            buildah copy --chmod=0755 $newcontainer ./artifact/"$2"/${{ env.BINARY_NAME }} /${{ env.BINARY_NAME }}
+            buildah config --entrypoint='["./${{ env.BINARY_NAME }}"]' $newcontainer
+
+            buildah config --author="Mogyuchi" $(awk '{print "--label=" $0}' <<< "${{ steps.meta.outputs.labels }}") $newcontainer
+            buildah inspect $newcontainer
+
+            buildah commit --manifest=localhost/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }} $newcontainer
+            buildah rm $newcontainer
+          }
+          build linux/amd64 x86_64-unknown-linux-musl
+          build linux/arm64 aarch64-unknown-linux-musl
+
+      - name: Push To GHCR
+        run: |
+          buildah manifest inspect localhost/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}
+          echo "${{ steps.meta.outputs.tags }}" | xargs -I{} --max-args=1 buildah --log-level=trace manifest push --creds=${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}
