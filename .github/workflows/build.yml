@@ -79,6 +79,7 @@ jobs:
           path: |
             target/${{ matrix.target }}/release/${{ needs.env.outputs.BINARY_NAME }}
             target/${{ matrix.target }}/release/${{ needs.env.outputs.BINARY_NAME }}.exe
+          if-no-files-found: error
       - name: Upload to release
         if: ${{ inputs.tag-name }}
         working-directory: target/${{ matrix.target }}/release/
