@@ -72,17 +72,19 @@ jobs:
         uses: taiki-e/install-action@e96513f64c39eb6ebc73e13b6e8470317202483a # v2.42.28
         with:
           tool: cross
-      - run: ${{ (matrix.use-cross) && 'cross' || 'cargo' }} build --locked --release --target ${{ matrix.target }}
+      - run: mkdir dist/
+      - run: |
+          ${{ (matrix.use-cross) && 'cross' || 'cargo' }} rustc --locked --release --target ${{ matrix.target }} -- --emit=link=dist/${{ needs.env.outputs.BINARY_NAME }}
       - uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
         with:
           name: ${{ matrix.target }}
           path: |
-            target/${{ matrix.target }}/release/${{ needs.env.outputs.BINARY_NAME }}
-            target/${{ matrix.target }}/release/${{ needs.env.outputs.BINARY_NAME }}.exe
+            dist/${{ needs.env.outputs.BINARY_NAME }}
+            dist/${{ needs.env.outputs.BINARY_NAME }}.exe
           if-no-files-found: error
       - name: Upload to release
         if: ${{ inputs.tag-name }}
-        working-directory: target/${{ matrix.target }}/release/
+        working-directory: dist/
         run: |
           if [ -e ${{ needs.env.outputs.BINARY_NAME }}.exe ]; then
             filename="${{ needs.env.outputs.BINARY_NAME }}-${{ inputs.tag-name }}-${{ matrix.target }}.exe"
