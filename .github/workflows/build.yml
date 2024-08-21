@@ -19,12 +19,22 @@ env:
   IMAGE_REGISTRY: ghcr.io
   IMAGE_NAMESPACE: ${{ github.repository_owner }}
   IMAGE_NAME: ${{ github.event.repository.name }}
-  BINARY_NAME: pow-summon-discordbot
 
 jobs:
-  build:
+  env:
     # release-please によるコミットの時は workflow_call でのみ実行する
     if: ${{ !( github.workflow == 'build' && startsWith(github.event.head_commit.message, 'release:') && github.event.head_commit.author.name == 'eoeo-release[bot]' ) }}
+    runs-on: ubuntu-latest
+    outputs:
+      BINARY_NAME: ${{ steps.meta.outputs.BINARY_NAME }}
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - id: meta
+        run: |
+          echo "BINARY_NAME=$(cargo metadata --offline --no-deps --format-version=1 | jq -r '.packages[].targets[] | select(.kind | map(. == "bin") | any ) | .name')" >> $GITHUB_OUTPUT
+
+  build:
+    needs: [env]
     permissions:
       contents: write
     strategy:
@@ -67,23 +77,23 @@ jobs:
         with:
           name: ${{ matrix.target }}
           path: |
-            target/${{ matrix.target }}/release/${{ env.BINARY_NAME }}
-            target/${{ matrix.target }}/release/${{ env.BINARY_NAME }}.exe
+            target/${{ matrix.target }}/release/${{ needs.env.outputs.BINARY_NAME }}
+            target/${{ matrix.target }}/release/${{ needs.env.outputs.BINARY_NAME }}.exe
       - name: Upload to release
         if: ${{ inputs.tag-name }}
         working-directory: target/${{ matrix.target }}/release/
         run: |
-          if [ -e ${{ env.BINARY_NAME }}.exe ]; then
-            filename="${{ env.BINARY_NAME }}-${{ inputs.tag-name }}-${{ matrix.target }}.exe"
-            mv ${{ env.BINARY_NAME }}.exe "$filename"
+          if [ -e ${{ needs.env.outputs.BINARY_NAME }}.exe ]; then
+            filename="${{ needs.env.outputs.BINARY_NAME }}-${{ inputs.tag-name }}-${{ matrix.target }}.exe"
+            mv ${{ needs.env.outputs.BINARY_NAME }}.exe "$filename"
             gh release upload ${{ inputs.tag-name }} "$filename"#${{ matrix.target }} --clobber
           else
-            filename="${{ env.BINARY_NAME }}-${{ inputs.tag-name }}-${{ matrix.target }}"
-            mv ${{ env.BINARY_NAME }} "$filename"
+            filename="${{ needs.env.outputs.BINARY_NAME }}-${{ inputs.tag-name }}-${{ matrix.target }}"
+            mv ${{ needs.env.outputs.BINARY_NAME }} "$filename"
             gh release upload ${{ inputs.tag-name }} "$filename"#${{ matrix.target }} --clobber
           fi
   image:
-    needs: build
+    needs: [env, build]
     if: ${{ github.event_name != 'pull_request' && github.ref_name == github.event.repository.default_branch }}
     permissions:
       packages: write
@@ -112,8 +122,8 @@ jobs:
         run: |
           build() {
             newcontainer=$(buildah from --platform="$1" scratch)
-            buildah copy --chmod=0755 $newcontainer ./artifact/"$2"/${{ env.BINARY_NAME }} /${{ env.BINARY_NAME }}
-            buildah config --entrypoint='["./${{ env.BINARY_NAME }}"]' $newcontainer
+            buildah copy --chmod=0755 $newcontainer ./artifact/"$2"/${{ needs.env.outputs.BINARY_NAME }} /${{ needs.env.outputs.BINARY_NAME }}
+            buildah config --entrypoint='["./${{ needs.env.outputs.BINARY_NAME }}"]' $newcontainer
 
             buildah config --author="Mogyuchi" $(awk '{print "--label=" $0}' <<< "${{ steps.meta.outputs.labels }}") $newcontainer
             buildah inspect $newcontainer
