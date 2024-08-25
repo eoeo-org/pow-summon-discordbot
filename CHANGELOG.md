@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.2](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.0.1...v1.0.2) (2024-08-25)
+
+
+### Dependencies
+
+* update rust crate serenity to v0.12.2 ([#15](https://github.com/eoeo-org/pow-summon-discordbot/issues/15)) ([2b537d6](https://github.com/eoeo-org/pow-summon-discordbot/commit/2b537d6b42faba822aea80fcd89bdb30b471c120))
+
+
+### Code Refactoring
+
+* fix 'clippy::search_is_some' lint error ([#38](https://github.com/eoeo-org/pow-summon-discordbot/issues/38)) ([fcc32c8](https://github.com/eoeo-org/pow-summon-discordbot/commit/fcc32c88ab1e83d29daf23874f81daa7feca2c5e))
+
 ## [1.0.1](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.0.0...v1.0.1) (2024-08-20)
 
 
