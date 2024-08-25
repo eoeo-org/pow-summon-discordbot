@@ -28,16 +28,16 @@ impl EventHandler for Handler {
         if member.user.bot {
             return;
         }
-        let Some(voice_channel) = ctx.http.get_channel(channel_id.into()).await.ok().and_then(|channel| channel.guild()).filter(|guild_channel| {guild_channel.kind == ChannelType::Voice}) else {return };
-        if let Some(afk_channel_id) = voice_channel
+        let Some(voice_channel) = ctx.http.get_channel(channel_id).await.ok().and_then(|channel| channel.guild()).filter(|guild_channel| {guild_channel.kind == ChannelType::Voice}) else {return };
+        if let Some(afk_metadata) = voice_channel
             .guild(&ctx.cache)
-            .and_then(|guild| guild.afk_channel_id)
+            .and_then(|guild| guild.afk_metadata.clone())
         {
-            if channel_id == afk_channel_id {
+            if channel_id == afk_metadata.afk_channel_id {
                 return;
             }
         }
-        let Ok(members) = voice_channel.members(&ctx.cache).await else{return}  ;
+        let Ok(members) = voice_channel.members(&ctx.cache) else{return}  ;
         if members
             .iter()
             .any(|member| member.user.bot)
