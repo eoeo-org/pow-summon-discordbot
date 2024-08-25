@@ -38,10 +38,9 @@ impl EventHandler for Handler {
             }
         }
         let Ok(members) = voice_channel.members(&ctx.cache).await else{return}  ;
-        if (members
+        if members
             .iter()
-            .find(|member| member.user.bot))
-        .is_some()
+            .any(|member| member.user.bot)
         {
             return;
         }
