@@ -22,13 +22,24 @@ impl EventHandler for Handler {
             }
         }
         let Some(channel_id) = new_state.channel_id else {
-            return
+            return;
         };
-        let Some(member)= new_state.member else{return };
+        let Some(member) = new_state.member else {
+            return;
+        };
         if member.user.bot {
             return;
         }
-        let Some(voice_channel) = ctx.http.get_channel(channel_id).await.ok().and_then(|channel| channel.guild()).filter(|guild_channel| {guild_channel.kind == ChannelType::Voice}) else {return };
+        let Some(voice_channel) = ctx
+            .http
+            .get_channel(channel_id)
+            .await
+            .ok()
+            .and_then(|channel| channel.guild())
+            .filter(|guild_channel| guild_channel.kind == ChannelType::Voice)
+        else {
+            return;
+        };
         if let Some(afk_metadata) = voice_channel
             .guild(&ctx.cache)
             .and_then(|guild| guild.afk_metadata.clone())
@@ -37,11 +48,10 @@ impl EventHandler for Handler {
                 return;
             }
         }
-        let Ok(members) = voice_channel.members(&ctx.cache) else{return}  ;
-        if members
-            .iter()
-            .any(|member| member.user.bot)
-        {
+        let Ok(members) = voice_channel.members(&ctx.cache) else {
+            return;
+        };
+        if members.iter().any(|member| member.user.bot) {
             return;
         }
         let mut non_bot_members = members;
