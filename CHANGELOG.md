@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.1.0...v1.1.1) (2024-08-27)
+
+
+### Build System
+
+* fix fetch-depth ([#47](https://github.com/eoeo-org/pow-summon-discordbot/issues/47)) ([b3ebae7](https://github.com/eoeo-org/pow-summon-discordbot/commit/b3ebae760eb34e6c81342ea8fe9b38afd4388da9))
+
 ## [1.1.0](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.0.2...v1.1.0) (2024-08-27)
 
 
