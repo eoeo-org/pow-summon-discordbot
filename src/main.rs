@@ -1,5 +1,6 @@
 use std::env;
 
+use serenity::all::ActivityData;
 use serenity::async_trait;
 use serenity::model::gateway::Ready;
 use serenity::model::prelude::ChannelType;
@@ -74,10 +75,16 @@ impl EventHandler for Handler {
 
 #[tokio::main]
 async fn main() {
+    let git_describe = option_env!("GIT_DESCRIBE").unwrap_or("");
+    println!(
+        "{pkg_name} - {git_describe}",
+        pkg_name = env!("CARGO_PKG_NAME")
+    );
     let token = env::var("DISCORD_TOKEN").expect("token");
     let intents = GatewayIntents::non_privileged();
     let mut client = Client::builder(token, intents)
         .event_handler(Handler)
+        .activity(ActivityData::custom(git_describe))
         .await
         .expect("Error creating client");
 
