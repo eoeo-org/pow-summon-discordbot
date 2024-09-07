@@ -40,9 +40,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [aarch64-unknown-linux-gnu, aarch64-unknown-linux-musl]
-        use-cross: [true]
-        include:
+        profile: ${{ github.ref_name == github.event.repository.default_branch && fromJson('["dev", "release"]') || fromJson('["dev"]') }}
+        platform:
+          - target: aarch64-unknown-linux-gnu
+            use-cross: true
+          - target: aarch64-unknown-linux-musl
+            use-cross: true
           - target: x86_64-unknown-linux-gnu
             use-cross: false
           - target: x86_64-unknown-linux-musl
@@ -56,7 +59,7 @@ jobs:
         shell: bash -xe {0}
     steps:
       - name: Install musl tools
-        if: matrix.target == 'x86_64-unknown-linux-musl'
+        if: matrix.platform.target == 'x86_64-unknown-linux-musl'
         run: |
           sudo apt-get install -y musl-tools --no-install-recommends
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
@@ -66,37 +69,37 @@ jobs:
       - uses: dtolnay/rust-toolchain@7b1c307e0dcbda6122208f10795a713336a9b35a # master
         with:
           toolchain: stable
-          target: ${{ matrix.target }}
+          target: ${{ matrix.platform.target }}
       - uses: Swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84 # v2.7.3
         with:
-          key: ${{ matrix.target }}
+          key: ${{ matrix.profile }}-${{ matrix.platform.target }}
       - name: Install cross
-        if: matrix.use-cross
+        if: matrix.platform.use-cross
         uses: taiki-e/install-action@0d892dd50e74877c42217af3d08cf71c83fde4e7 # v2.42.39
         with:
           tool: cross
       - run: mkdir dist/
       - run: |
-          ${{ (matrix.use-cross) && 'cross' || 'cargo' }} rustc --locked ${{ github.ref_name == github.event.repository.default_branch && '--release' || '' }} --target ${{ matrix.target }} -- --emit=link=dist/${{ needs.env.outputs.BINARY_NAME }}
+          ${{ matrix.platform.use-cross && 'cross' || 'cargo' }} rustc --locked ${{ matrix.profile == 'release' && '--release' || '' }} --target=${{ matrix.platform.target }} -- --emit=link=dist/${{ needs.env.outputs.BINARY_NAME }}
       - uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
         with:
-          name: ${{ matrix.target }}
+          name: ${{ matrix.profile }}-${{ matrix.platform.target }}
           path: |
             dist/${{ needs.env.outputs.BINARY_NAME }}
             dist/${{ needs.env.outputs.BINARY_NAME }}.exe
           if-no-files-found: error
       - name: Upload to release
-        if: ${{ inputs.tag-name }}
+        if: ${{ inputs.tag-name && matrix.profile == 'release' }}
         working-directory: dist/
         run: |
           if [ -e ${{ needs.env.outputs.BINARY_NAME }}.exe ]; then
-            filename="${{ needs.env.outputs.BINARY_NAME }}-${{ inputs.tag-name }}-${{ matrix.target }}.exe"
+            filename="${{ needs.env.outputs.BINARY_NAME }}-${{ inputs.tag-name }}-${{ matrix.platform.target }}.exe"
             mv ${{ needs.env.outputs.BINARY_NAME }}.exe "$filename"
-            gh release upload ${{ inputs.tag-name }} "$filename"#${{ matrix.target }} --clobber
+            gh release upload ${{ inputs.tag-name }} "$filename"#${{ matrix.platform.target }} --clobber
           else
-            filename="${{ needs.env.outputs.BINARY_NAME }}-${{ inputs.tag-name }}-${{ matrix.target }}"
+            filename="${{ needs.env.outputs.BINARY_NAME }}-${{ inputs.tag-name }}-${{ matrix.platform.target }}"
             mv ${{ needs.env.outputs.BINARY_NAME }} "$filename"
-            gh release upload ${{ inputs.tag-name }} "$filename"#${{ matrix.target }} --clobber
+            gh release upload ${{ inputs.tag-name }} "$filename"#${{ matrix.platform.target }} --clobber
           fi
   image:
     needs: [env, build]
@@ -111,7 +114,7 @@ jobs:
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
           path: artifact
-          pattern: '*-unknown-linux-musl'
+          pattern: release-*-unknown-linux-musl
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
