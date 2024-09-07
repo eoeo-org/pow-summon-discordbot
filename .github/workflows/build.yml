@@ -132,7 +132,7 @@ jobs:
         run: |
           build() {
             newcontainer=$(buildah from --platform="$1" scratch)
-            buildah copy --chmod=0755 $newcontainer ./artifact/"$2"/${{ needs.env.outputs.BINARY_NAME }} /${{ needs.env.outputs.BINARY_NAME }}
+            buildah copy --chmod=0755 $newcontainer ./artifact/release-"$2"/${{ needs.env.outputs.BINARY_NAME }} /${{ needs.env.outputs.BINARY_NAME }}
             buildah config --entrypoint='["./${{ needs.env.outputs.BINARY_NAME }}"]' $newcontainer
 
             buildah config --author="Mogyuchi" $(awk '{print "--label=" $0}' <<< "${{ steps.meta.outputs.labels }}") $newcontainer
