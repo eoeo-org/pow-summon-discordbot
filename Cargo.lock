@@ -708,7 +708,7 @@ checksum = "cc9c68a3f6da06753e9335d63e27f6b9754dd1920d941135b7ea8224f141adb2"
 
 [[package]]
 name = "pow-summon-discordbot"
-version = "1.1.4"
+version = "1.1.5"
 dependencies = [
  "git2",
  "serenity",
