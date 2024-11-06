@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.10](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.1.9...v1.1.10) (2024-11-06)
+
+
+### Dependencies
+
+* lock file maintenance ([#137](https://github.com/eoeo-org/pow-summon-discordbot/issues/137)) ([519994d](https://github.com/eoeo-org/pow-summon-discordbot/commit/519994d9056c354e0bd95e10b8ee49e76d40ef21))
+* lock file maintenance ([#140](https://github.com/eoeo-org/pow-summon-discordbot/issues/140)) ([60958bc](https://github.com/eoeo-org/pow-summon-discordbot/commit/60958bc4886def80de2151dde8b4dcd845012428))
+
 ## [1.1.9](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.1.8...v1.1.9) (2024-10-31)
 
 
