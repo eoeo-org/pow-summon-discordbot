@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.11](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.1.10...v1.1.11) (2024-11-07)
+
+
+### Dependencies
+
+* update rust crate tokio to v1.41.1 ([#143](https://github.com/eoeo-org/pow-summon-discordbot/issues/143)) ([96eb8e3](https://github.com/eoeo-org/pow-summon-discordbot/commit/96eb8e334d3a87ea17ccf679ac11b8d998b48fea))
+
 ## [1.1.10](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.1.9...v1.1.10) (2024-11-06)
 
 
