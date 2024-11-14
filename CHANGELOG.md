@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.13](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.1.12...v1.1.13) (2024-11-14)
+
+
+### Dependencies
+
+* update rust crate serenity to v0.12.3 ([#152](https://github.com/eoeo-org/pow-summon-discordbot/issues/152)) ([b96bcaf](https://github.com/eoeo-org/pow-summon-discordbot/commit/b96bcaf21f2994540d611669cf6295218ae172af))
+
 ## [1.1.12](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.1.11...v1.1.12) (2024-11-11)
 
 
