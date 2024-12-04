@@ -81,10 +81,14 @@ async fn main() {
         pkg_name = env!("CARGO_PKG_NAME")
     );
     let token = env::var("DISCORD_TOKEN").expect("token");
+    run(token, git_describe).await;
+}
+
+async fn run(token: String, activity: &str) {
     let intents = GatewayIntents::non_privileged();
     let mut client = Client::builder(token, intents)
         .event_handler(Handler)
-        .activity(ActivityData::custom(git_describe))
+        .activity(ActivityData::custom(activity))
         .await
         .expect("Error creating client");
 
