@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.19](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.1.18...v1.1.19) (2024-12-08)
+
+
+### Dependencies
+
+* update rust toolchain to nightly version ([#191](https://github.com/eoeo-org/pow-summon-discordbot/issues/191)) ([5c4a239](https://github.com/eoeo-org/pow-summon-discordbot/commit/5c4a2398da2172cd3e8ec7e7eba1bca3146f551a))
+
+
+### Code Refactoring
+
+* extract to `run` function ([#185](https://github.com/eoeo-org/pow-summon-discordbot/issues/185)) ([ddb242a](https://github.com/eoeo-org/pow-summon-discordbot/commit/ddb242ad134f34fd3250c638a3f5745350065007))
+
 ## [1.1.18](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.1.17...v1.1.18) (2024-12-03)
 
 
