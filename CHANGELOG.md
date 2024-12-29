@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.1.19](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.1.18...v1.1.19) (2024-12-29)
+
+
+### Dependencies
+
+* lock file maintenance ([#194](https://github.com/eoeo-org/pow-summon-discordbot/issues/194)) ([57264ac](https://github.com/eoeo-org/pow-summon-discordbot/commit/57264ac3164cb785925d560d997ee05d8c9f7100))
+* lock file maintenance ([#200](https://github.com/eoeo-org/pow-summon-discordbot/issues/200)) ([0f3caf6](https://github.com/eoeo-org/pow-summon-discordbot/commit/0f3caf68fca6a42e00eaf33105554d099c0cb3f9))
+* lock file maintenance ([#212](https://github.com/eoeo-org/pow-summon-discordbot/issues/212)) ([f4f590f](https://github.com/eoeo-org/pow-summon-discordbot/commit/f4f590f3af717c3198769842c818e20734a49394))
+* update rust toolchain to nightly version ([#191](https://github.com/eoeo-org/pow-summon-discordbot/issues/191)) ([5c4a239](https://github.com/eoeo-org/pow-summon-discordbot/commit/5c4a2398da2172cd3e8ec7e7eba1bca3146f551a))
+
+
+### Code Refactoring
+
+* extract to `run` function ([#185](https://github.com/eoeo-org/pow-summon-discordbot/issues/185)) ([ddb242a](https://github.com/eoeo-org/pow-summon-discordbot/commit/ddb242ad134f34fd3250c638a3f5745350065007))
+* move to lib.rs ([#187](https://github.com/eoeo-org/pow-summon-discordbot/issues/187)) ([135679f](https://github.com/eoeo-org/pow-summon-discordbot/commit/135679f635deba2a9b970a1da048b2c4e4292087))
+
 ## [1.1.18](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.1.17...v1.1.18) (2024-12-03)
 
 
