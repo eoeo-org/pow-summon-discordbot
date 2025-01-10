@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.21](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.1.20...v1.1.21) (2025-01-10)
+
+
+### Dependencies
+
+* lock file maintenance ([#224](https://github.com/eoeo-org/pow-summon-discordbot/issues/224)) ([4b048ef](https://github.com/eoeo-org/pow-summon-discordbot/commit/4b048ef4e1784ce1e659fe1e506adfd9e6a02b86))
+* update rust crate tokio to v1.43.0 ([#227](https://github.com/eoeo-org/pow-summon-discordbot/issues/227)) ([0a00c24](https://github.com/eoeo-org/pow-summon-discordbot/commit/0a00c24ccb3fdc0c797d72850276a7c778e7c1ec))
+
 ## [1.1.20](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.1.19...v1.1.20) (2024-12-30)
 
 
