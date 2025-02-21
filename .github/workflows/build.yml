@@ -55,6 +55,10 @@ jobs:
         shell: bash -xe {0}
     steps:
       - name: Install musl tools
+        if: matrix.platform.target == 'x86_64-unknown-linux-musl'
+        run: |
+          sudo apt-get install -y musl-tools --no-install-recommends
+      - name: Install musl tools
         if: matrix.platform.target == 'aarch64-unknown-linux-musl'
         run: |
           sudo apt-get install -y musl-tools --no-install-recommends
