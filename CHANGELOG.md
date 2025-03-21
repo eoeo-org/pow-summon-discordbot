@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.23](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.1.22...v1.1.23) (2025-03-21)
+
+
+### Build System
+
+* update Rust edition from 2021 to 2024 ([#264](https://github.com/eoeo-org/pow-summon-discordbot/issues/264)) ([2643d12](https://github.com/eoeo-org/pow-summon-discordbot/commit/2643d1273628345538e51e65264e379ab734ebcc))
+
 ## [1.1.22](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.1.21...v1.1.22) (2025-03-21)
 
 
