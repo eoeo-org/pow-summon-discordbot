@@ -1,3 +1,5 @@
+cargo-features = ["trim-paths"]
+
 [package]
 name = "pow-summon-discordbot"
 version = "1.1.21"
@@ -30,3 +32,4 @@ pedantic = "warn"
 strip = "symbols"
 lto = "fat"
 codegen-units = 1
+trim-paths = "all"
