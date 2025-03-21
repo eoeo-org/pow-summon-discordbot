@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.1.22](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.1.21...v1.1.22) (2025-03-21)
+
+
+### Dependencies
+
+* lock file maintenance ([#232](https://github.com/eoeo-org/pow-summon-discordbot/issues/232)) ([252ee22](https://github.com/eoeo-org/pow-summon-discordbot/commit/252ee222d7111a4621608f7fef09adeb9fabc74f))
+* lock file maintenance ([#239](https://github.com/eoeo-org/pow-summon-discordbot/issues/239)) ([80222c0](https://github.com/eoeo-org/pow-summon-discordbot/commit/80222c0b896bb8050b1c959241642871beafd13d))
+* lock file maintenance ([#245](https://github.com/eoeo-org/pow-summon-discordbot/issues/245)) ([4513503](https://github.com/eoeo-org/pow-summon-discordbot/commit/45135032a5eca558bcdad28bfa03478f50edfdd3))
+* lock file maintenance ([#250](https://github.com/eoeo-org/pow-summon-discordbot/issues/250)) ([2f25755](https://github.com/eoeo-org/pow-summon-discordbot/commit/2f25755603d4c339f9b3d796d09f4eba7a42bf8a))
+* update rust crate tokio to v1.44.1 ([#256](https://github.com/eoeo-org/pow-summon-discordbot/issues/256)) ([702e214](https://github.com/eoeo-org/pow-summon-discordbot/commit/702e214d7cdc90bb97f4e0819c2a7f15cc6d1501))
+* update rust toolchain to nightly-2025-02-21 ([#249](https://github.com/eoeo-org/pow-summon-discordbot/issues/249)) ([c8e3131](https://github.com/eoeo-org/pow-summon-discordbot/commit/c8e3131a679f9be30c88bdab84b1fe652f24abcc))
+* update rust toolchain to nightly-2025-03-21 ([#253](https://github.com/eoeo-org/pow-summon-discordbot/issues/253)) ([90068e4](https://github.com/eoeo-org/pow-summon-discordbot/commit/90068e45869f74c158b63f3f6766849549b184e5))
+
+
+### Reverts
+
+* "build: enable trim-paths feature to remove path information from binary" ([#257](https://github.com/eoeo-org/pow-summon-discordbot/issues/257)) ([e5ab0d6](https://github.com/eoeo-org/pow-summon-discordbot/commit/e5ab0d68bd1e93acf3c7dbc0cf416f6eac378946))
+
+
+### Build System
+
+* enable trim-paths feature to remove path information from binary ([#255](https://github.com/eoeo-org/pow-summon-discordbot/issues/255)) ([6a3d25b](https://github.com/eoeo-org/pow-summon-discordbot/commit/6a3d25b79d9af4887f8005739d807c79dcf4d142))
+
 ## [1.1.21](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.1.20...v1.1.21) (2025-01-10)
 
 
