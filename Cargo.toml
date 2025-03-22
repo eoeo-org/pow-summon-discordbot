@@ -21,7 +21,7 @@ features = [
 version = "=0.12.4"
 
 [build-dependencies]
-git2 = { version = "=0.20.1", default-features = false }
+gix = { version = "=0.70.0", default-features = false, features = ["revision", "status"] }
 
 [lints.clippy]
 pedantic = "warn"

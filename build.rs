@@ -1,5 +1,3 @@
-use git2::{DescribeFormatOptions, DescribeOptions, Error, Repository};
-
 fn main() {
     match get_git_describe_result() {
         Ok(result) => println!("cargo::rustc-env=GIT_DESCRIBE={result}"),
@@ -7,17 +5,17 @@ fn main() {
     }
 }
 
-fn get_git_describe_result() -> Result<String, Error> {
-    let repo = Repository::open(".")?;
-    let describe = repo.describe(
-        DescribeOptions::new()
-            .describe_tags()
-            .show_commit_oid_as_fallback(true),
-    )?;
-    let formatted = describe.format(Some(
-        DescribeFormatOptions::new()
-            .always_use_long_format(true)
-            .dirty_suffix("-dirty"),
-    ))?;
+fn get_git_describe_result() -> Result<String, Box<dyn std::error::Error>> {
+    let repo = gix::discover(".")?;
+    let mut describe = repo
+        .head_commit()?
+        .describe()
+        .names(gix::commit::describe::SelectRef::AllTags);
+    let mut format = describe.format()?;
+    if repo.is_dirty()? {
+        format.dirty_suffix = Some("dirty".into());
+    }
+    let formatted = format.long(true).to_string();
+
     Ok(formatted)
 }
