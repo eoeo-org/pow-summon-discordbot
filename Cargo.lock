@@ -1795,7 +1795,7 @@ dependencies = [
 
 [[package]]
 name = "pow-summon-discordbot"
-version = "1.1.24"
+version = "1.1.25"
 dependencies = [
  "gix",
  "serenity",
