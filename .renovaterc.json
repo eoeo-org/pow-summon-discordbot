@@ -15,17 +15,12 @@
   "prConcurrentLimit": 3,
   "packageRules": [
     {
-      "matchDepTypes": [
-        "dependencies",
-        "require"
-      ],
+      "matchDepTypes": ["dependencies", "require"],
       "semanticCommitType": "deps",
       "semanticCommitScope": null
     },
     {
-      "matchUpdateTypes": [
-        "lockFileMaintenance"
-      ],
+      "matchUpdateTypes": ["lockFileMaintenance"],
       "semanticCommitType": "deps",
       "semanticCommitScope": null
     }
@@ -40,9 +35,7 @@
     {
       "customType": "jsonata",
       "fileFormat": "toml",
-      "managerFilePatterns": [
-        "/^rust-toolchain\\.toml$/"
-      ],
+      "managerFilePatterns": ["/^rust-toolchain\\.toml$/"],
       "matchStrings": [
         "toolchain.( $contains(channel, /^\\d+\\.\\d+\\.\\d+$/) ? { 'currentValue': channel, 'depName': 'rust-lang/rust', 'datasource': 'github-releases', 'versioning': 'semver' } : $contains(channel, /^nightly-/) ? { 'currentValue': $substringAfter(channel, 'nightly-'), 'depName': 'rust-nightly', 'datasource': 'custom.rust-nightly', 'versioning': 'azure-rest-api' } : {} )"
       ],
