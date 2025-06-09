@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.32](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.1.31...v1.1.32) (2025-06-09)
+
+
+### Dependencies
+
+* lock file maintenance ([#349](https://github.com/eoeo-org/pow-summon-discordbot/issues/349)) ([e494673](https://github.com/eoeo-org/pow-summon-discordbot/commit/e494673a81e96c6dc40b7d7c783e8bd29c29ebfd))
+* update dependency rust-nightly to v20250609 ([#348](https://github.com/eoeo-org/pow-summon-discordbot/issues/348)) ([a36aa78](https://github.com/eoeo-org/pow-summon-discordbot/commit/a36aa78de96f46de2701562842ac6fae27f132d2))
+
 ## [1.1.31](https://github.com/eoeo-org/pow-summon-discordbot/compare/v1.1.30...v1.1.31) (2025-06-05)
 
 
